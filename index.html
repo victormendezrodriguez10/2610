@@ -290,7 +290,7 @@
     $('#r-title').textContent = p.title;
     $('#r-desc').textContent = p.desc;
     const msg = `${p.emoji} ¡Ya he elegido nuestra cita! Quiero: ${p.title} 💘`;
-    $('#btn-wa').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    $('#btn-wa').href = 'https://wa.me/34606440450?text=' + encodeURIComponent(msg);
     try { localStorage.setItem('cita-elegida', selected); } catch (e) {}
     show('result');
     confetti();
