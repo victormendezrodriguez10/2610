@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2a0a1e">
+<title>Nuestra cita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg1: #2a0a1e;
+    --bg2: #5a1a3c;
+    --bg3: #8c2f5a;
+    --card: rgba(255, 255, 255, 0.10);
+    --card-border: rgba(255, 255, 255, 0.22);
+    --gold: #f4c988;
+    --rose: #ff8fab;
+    --text: #fff5f8;
+    --muted: rgba(255, 245, 248, 0.75);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    color: var(--text);
+    background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 55%, var(--bg3) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Corazones flotando de fondo */
+  .hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .hearts span {
+    position: absolute; bottom: -40px;
+    font-size: 18px; opacity: 0;
+    animation: float linear infinite;
+    filter: drop-shadow(0 0 6px rgba(255,143,171,.6));
+  }
+  @keyframes float {
+    0%   { transform: translateY(0) rotate(0deg) scale(.8); opacity: 0; }
+    10%  { opacity: .55; }
+    90%  { opacity: .3; }
+    100% { transform: translateY(-110vh) rotate(25deg) scale(1.2); opacity: 0; }
+  }
+
+  .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 16px 48px; }
+
+  /* Pantallas */
+  .screen { display: none; animation: fadeIn .6s ease both; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* Portada */
+  .intro { min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px 8px; }
+  .intro .big-heart { font-size: 72px; animation: beat 1.6s ease-in-out infinite; filter: drop-shadow(0 0 18px rgba(255,143,171,.7)); }
+  @keyframes beat { 0%,100% { transform: scale(1); } 25% { transform: scale(1.12); } 45% { transform: scale(1); } 65% { transform: scale(1.08); } }
+  .script { font-family: 'Great Vibes', cursive; font-weight: 400; color: var(--gold); }
+  .intro h1 { font-size: 54px; line-height: 1.05; margin-top: 18px; }
+  .intro h1 small { display: block; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: var(--muted); margin-top: 8px; letter-spacing: .5px; }
+  .intro p { font-family: 'Cormorant Garamond', serif; font-size: 20px; line-height: 1.5; margin: 28px 0 36px; color: var(--text); max-width: 340px; }
+  .btn {
+    appearance: none; border: 0; cursor: pointer;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 17px;
+    padding: 16px 32px; border-radius: 999px;
+    background: linear-gradient(135deg, #ffb3c6, #ff6f91);
+    color: #3a0b22;
+    box-shadow: 0 10px 30px rgba(255,111,145,.45), inset 0 1px 0 rgba(255,255,255,.5);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:active { transform: scale(.97); box-shadow: 0 6px 18px rgba(255,111,145,.4); }
+  .btn.ghost { background: transparent; color: var(--muted); box-shadow: none; font-weight: 600; font-size: 15px; padding: 12px 20px; }
+  .btn.gold { background: linear-gradient(135deg, #ffe3b3, #f4c988); color: #4a2a0b; box-shadow: 0 10px 30px rgba(244,201,136,.35); }
+
+  /* Elección */
+  .choose header { text-align: center; padding: 40px 0 22px; }
+  .choose header h2 { font-size: 46px; line-height: 1; }
+  .choose header p { font-family: 'Cormorant Garamond', serif; font-size: 19px; color: var(--muted); margin-top: 8px; }
+
+  .cards { display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    position: relative; display: flex; align-items: center; gap: 16px;
+    padding: 18px 18px 18px 16px; border-radius: 22px;
+    background: var(--card); border: 1.5px solid var(--card-border);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    cursor: pointer; text-align: left; width: 100%; color: inherit; font: inherit;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    animation: fadeIn .6s ease both;
+  }
+  .card:nth-child(1) { animation-delay: .05s } .card:nth-child(2) { animation-delay: .12s }
+  .card:nth-child(3) { animation-delay: .19s } .card:nth-child(4) { animation-delay: .26s }
+  .card:nth-child(5) { animation-delay: .33s } .card:nth-child(6) { animation-delay: .40s }
+  .card:active { transform: scale(.98); }
+  .card.selected {
+    background: rgba(255, 143, 171, 0.22); border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(255,143,171,.25), 0 12px 30px rgba(0,0,0,.25);
+    transform: scale(1.02);
+  }
+  .card .emoji {
+    flex: 0 0 58px; height: 58px; border-radius: 18px; display: grid; place-items: center;
+    font-size: 30px; background: rgba(255,255,255,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .card .txt h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 21px; line-height: 1.15; }
+  .card .txt p { font-size: 13.5px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+  .card .check {
+    position: absolute; top: 10px; right: 12px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--rose); color: #3a0b22; display: grid; place-items: center; font-size: 15px; font-weight: 900;
+    transform: scale(0); transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .card.selected .check { transform: scale(1); }
+
+  .confirm-bar { position: sticky; bottom: 0; padding: 18px 0 8px; margin-top: 18px; text-align: center;
+    background: linear-gradient(to top, rgba(42,10,30,.95) 60%, transparent); }
+  .confirm-bar .btn[disabled] { opacity: .45; pointer-events: none; }
+  .confirm-bar .hint { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+  /* Resultado */
+  .result { min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px 8px; }
+  .result .big { font-size: 84px; margin-bottom: 8px; animation: pop .7s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes pop { from { transform: scale(0) rotate(-20deg); } to { transform: scale(1) rotate(0); } }
+  .result h2 { font-size: 46px; line-height: 1.05; }
+  .result .plan {
+    margin: 22px 0 10px; padding: 22px 24px; border-radius: 24px; width: 100%;
+    background: var(--card); border: 1.5px solid var(--card-border); backdrop-filter: blur(10px);
+  }
+  .result .plan h3 { font-family: 'Cormorant Garamond', serif; font-size: 27px; font-weight: 600; line-height: 1.15; }
+  .result .plan p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+  .result .note { font-family: 'Cormorant Garamond', serif; font-size: 19px; line-height: 1.5; color: var(--text); margin: 14px 0 28px; max-width: 320px; }
+  .result .actions { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; }
+  .result .actions .btn { width: 100%; max-width: 320px; }
+  .result .sign { margin-top: 34px; font-size: 34px; }
+
+  /* Confeti */
+  .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; }
+  .confetti i { position: absolute; top: -20px; width: 10px; height: 14px; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: .2; } }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+<div class="confetti" id="confetti"></div>
+
+<main class="app">
+
+  <!-- 1. Portada -->
+  <section class="screen intro active" id="s-intro">
+    <div class="big-heart">💗</div>
+    <h1 class="script">Leticia<small>tengo una pregunta para ti…</small></h1>
+    <p>Hoy te toca elegir a ti. He preparado seis planes y solo uno puede ganar. ¿Cuál será nuestra próxima cita?</p>
+    <button class="btn" id="btn-start">Quiero elegir 💌</button>
+  </section>
+
+  <!-- 2. Elección -->
+  <section class="screen choose" id="s-choose">
+    <header>
+      <h2 class="script">¿Qué te apetece?</h2>
+      <p>Toca el plan que más te guste</p>
+    </header>
+
+    <div class="cards" id="cards">
+      <button class="card" data-id="laguna">
+        <div class="emoji">🌅</div>
+        <div class="txt"><h3>Picnic al atardecer</h3><p>En la Laguna de las Madres, con manta, algo rico y el cielo cambiando de color.</p></div>
+        <div class="check">✓</div>
+      </button>
+      <button class="card" data-id="chinchon">
+        <div class="emoji">🏰</div>
+        <div class="txt"><h3>Escapada a Chinchón</h3><p>Pasear por su plaza, perdernos por las callejuelas y comer sin prisa.</p></div>
+        <div class="check">✓</div>
+      </button>
+      <button class="card" data-id="cena">
+        <div class="emoji">🕯️</div>
+        <div class="txt"><h3>Cena casera de restaurante</h3><p>Velas, música y cero móviles. Solo tú, yo y un menú hecho con cariño.</p></div>
+        <div class="check">✓</div>
+      </button>
+      <button class="card" data-id="fritz">
+        <div class="emoji">🍔</div>
+        <div class="txt"><h3>Recrear nuestra primera cita</h3><p>Volver a comer al Fritz Gerald, como aquel primer día, pero sabiendo cómo acaba.</p></div>
+        <div class="check">✓</div>
+      </button>
+      <button class="card" data-id="cine">
+        <div class="emoji">🎬</div>
+        <div class="txt"><h3>Cine o bolera</h3><p>Palomitas y manta de cine, o strikes y risas en la bolera. Tú decides cuál.</p></div>
+        <div class="check">✓</div>
+      </button>
+      <button class="card" data-id="juegos">
+        <div class="emoji">🎲</div>
+        <div class="txt"><h3>Noche de juegos de mesa</h3><p>Picoteo, pique sano y revancha asegurada. Que gane la mejor (o sea, tú).</p></div>
+        <div class="check">✓</div>
+      </button>
+    </div>
+
+    <div class="confirm-bar">
+      <button class="btn" id="btn-confirm" disabled>Este es el plan 💘</button>
+      <div class="hint">Puedes cambiar de opinión antes de confirmar</div>
+    </div>
+  </section>
+
+  <!-- 3. Resultado -->
+  <section class="screen result" id="s-result">
+    <div class="big" id="r-emoji">💗</div>
+    <h2 class="script">¡Hecho!</h2>
+    <div class="plan">
+      <h3 id="r-title"></h3>
+      <p id="r-desc"></p>
+    </div>
+    <p class="note">Ahora solo falta que me lo digas para empezar a prepararlo todo.</p>
+    <div class="actions">
+      <a class="btn gold" id="btn-wa" href="#" target="_blank" rel="noopener">Mandárselo a Víctor 💬</a>
+      <button class="btn ghost" id="btn-back">Cambiar de plan</button>
+    </div>
+    <div class="sign script">Te quiero</div>
+  </section>
+
+</main>
+
+<script>
+  const PLANES = {
+    laguna:   { emoji: '🌅', title: 'Picnic al atardecer en la Laguna de las Madres', desc: 'Manta, algo rico y el cielo cambiando de color.' },
+    chinchon: { emoji: '🏰', title: 'Escapada a Chinchón', desc: 'Pasear por su plaza y comer sin prisa.' },
+    cena:     { emoji: '🕯️', title: 'Cena casera de restaurante', desc: 'Velas, música y sin móviles.' },
+    fritz:    { emoji: '🍔', title: 'Recrear nuestra primera cita en el Fritz Gerald', desc: 'Como aquel primer día, pero sabiendo cómo acaba.' },
+    cine:     { emoji: '🎬', title: 'Cine o bolera', desc: 'Palomitas o strikes, tú eliges.' },
+    juegos:   { emoji: '🎲', title: 'Noche de juegos de mesa', desc: 'Picoteo, pique sano y revancha asegurada.' },
+  };
+
+  const $ = s => document.querySelector(s);
+  const screens = { intro: $('#s-intro'), choose: $('#s-choose'), result: $('#s-result') };
+  let selected = null;
+
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // Corazones de fondo
+  (function hearts() {
+    const box = $('#hearts');
+    const icons = ['💗', '💕', '🤍', '✨', '💖'];
+    for (let i = 0; i < 18; i++) {
+      const s = document.createElement('span');
+      s.textContent = icons[i % icons.length];
+      s.style.left = Math.random() * 100 + '%';
+      s.style.fontSize = (12 + Math.random() * 18) + 'px';
+      s.style.animationDuration = (9 + Math.random() * 10) + 's';
+      s.style.animationDelay = (-Math.random() * 18) + 's';
+      box.appendChild(s);
+    }
+  })();
+
+  function confetti() {
+    const box = $('#confetti');
+    const colors = ['#ff8fab', '#f4c988', '#ffffff', '#ffb3c6', '#ff6f91'];
+    for (let i = 0; i < 90; i++) {
+      const p = document.createElement('i');
+      p.style.left = Math.random() * 100 + '%';
+      p.style.background = colors[i % colors.length];
+      p.style.animationDuration = (2.2 + Math.random() * 1.8) + 's';
+      p.style.animationDelay = (Math.random() * .6) + 's';
+      p.style.transform = `rotate(${Math.random() * 360}deg)`;
+      box.appendChild(p);
+      setTimeout(() => p.remove(), 4500);
+    }
+  }
+
+  $('#btn-start').addEventListener('click', () => show('choose'));
+
+  $('#cards').addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selected = card.dataset.id;
+    $('#btn-confirm').disabled = false;
+    if (navigator.vibrate) navigator.vibrate(12);
+  });
+
+  $('#btn-confirm').addEventListener('click', () => {
+    if (!selected) return;
+    const p = PLANES[selected];
+    $('#r-emoji').textContent = p.emoji;
+    $('#r-title').textContent = p.title;
+    $('#r-desc').textContent = p.desc;
+    const msg = `${p.emoji} ¡Ya he elegido nuestra cita! Quiero: ${p.title} 💘`;
+    $('#btn-wa').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    try { localStorage.setItem('cita-elegida', selected); } catch (e) {}
+    show('result');
+    confetti();
+  });
+
+  $('#btn-back').addEventListener('click', () => show('choose'));
+
+  // Si ya eligió antes, recordar la selección
+  try {
+    const prev = localStorage.getItem('cita-elegida');
+    if (prev && PLANES[prev]) {
+      const card = document.querySelector(`.card[data-id="${prev}"]`);
+      if (card) { card.classList.add('selected'); selected = prev; $('#btn-confirm').disabled = false; }
+    }
+  } catch (e) {}
+</script>
+</body>
+</html>
